@@ -9,3 +9,15 @@ Team members FT_3
 * Bart de Man
 * Spiros Tzavaras
 
+## Installation
+
+1. Clone the project with git clone git@github.com:felixbarten/software-architecture.git (for SSH) 
+2. Run the gradle script (linux assumed) 
+`
+> cd ./QC_robot/buildscripts
+> chmod u+x ./gradlew
+> ./gradlew eclipse
+> ./gradlew build
+`
+These commands will create the necessary eclipse project files and build the project. 
+3. Import the project into eclipse
