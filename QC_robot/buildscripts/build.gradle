@@ -17,6 +17,8 @@ subprojects {
   }
 }
 
+def version = '1.0'
+
 
 jar {
   manifest {

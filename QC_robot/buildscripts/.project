@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Quality Care Robot</name>
+	<comment/>
+	<projects/>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments/>
+		</buildCommand>
+	</buildSpec>
+	<linkedResources>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java</location>
+		</link>
+		<link>
+			<name>resources</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/resources</location>
+		</link>
+		<link>
+			<name>instruction</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/instruction</location>
+		</link>
+		<link>
+			<name>networking</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/networking</location>
+		</link>
+		<link>
+			<name>output</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/output</location>
+		</link>
+		<link>
+			<name>processing</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/processing</location>
+		</link>
+		<link>
+			<name>services</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/services</location>
+		</link>
+		<link>
+			<name>storage</name>
+			<type>2</type>
+			<location>/home/anxys/documents/master_software_engineering/software_architectures/assignment/work/software-architecture/QC_robot/src/main/java/modules/storage</location>
+		</link>
+	</linkedResources>
+</projectDescription>
