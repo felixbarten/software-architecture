@@ -1,136 +1,118 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 1.8
-version = '1.0'
+def dest = '../dist/debugging'
+
+buildDir = 'dest'
+
+subprojects {
+  buildDir = new File(rootDir, '../dist/debugging/modules/')
+    apply plugin: 'java'
+
+    dependencies {
+      testCompile group: 'junit', name: 'junit', version: '4.+'
+    }
+  repositories {
+    mavenCentral()
+  }
+}
+
 
 jar {
-    manifest {
-        attributes 'Implementation-Title': 'Quality Care Robot',
-                   'Implementation-Version': version
-    }
+  manifest {
+    attributes 'Implementation-Title': 'Quality Care Robot',
+               'Implementation-Version': version
+  }
 }
-
 
 sourceSets {
-    main {
-        java {
-            srcDir '../src/main/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
+  main {
+    java {
+      srcDir '../src/main/java'
     }
-    tests {
-      java {
-        srcDir '../src/main/java/modules/instruction'
-      }
-
-      output.classesDir '$buildDir/modules/instruction/'
-    }    
-
-    instruction {
-      java {
-        srcDir '../src/main/java/modules/instruction'
-      }
-
-      output.classesDir '$buildDir/modules/instruction/'
-    }    
-    services {
-        java {
-            srcDir '../src/main/java/modules/services'
-        }
-
-      output.classesDir '$buildDir/modules/services/'
+    resources {
+      srcDir '../src/main/resources'
     }
-    processing {
-        java {
-            srcDir '../src/main/java/modules/processing'
-        }
-
-      output.classesDir '$buildDir/modules/processing/'
-    }
-    storagge {
-        java {
-            srcDir '../src/main/java/modules/storage'
-        }
-      output.classesDir '$buildDir/modules/storage/'
-    }
-    output {
-        java {
-            srcDir '../src/main/java/modules/output'
-        }
-      output.classesDir '$buildDir/modules/output/'
-    }
-    networking {
-        java {
-            srcDir '../src/main/java/modules/networking'
-        }
-      output.classesDir '$buildDir/modules/networking/'
-    }
-    movement {
-        java {
-            srcDir '../src/main/java/modules/modules'
-        }
-      output.classesDir '$buildDir/modules/movement/'
-    }
-    monitoring {
-        java {
-            srcDir '../src/main/modules/monitoring'
-        }
-      output.classesDir '$buildDir/modules/monitoring/'
-    }
-}
-
-
-task release << {
-  doFirst {
-    buildDir = '../dist/release'
   }
-  build
-}
+  tests {
+    java {
+      srcDir '../src/main/java/modules/instruction'
+    }
 
-task debug << {
-  doFirst {
-    buildDir = '../dist/debugging'
+    output.classesDir '$buildDir/modules/instruction/'
+  }    
+  instruction {
+    java {
+      srcDir '../src/main/java/modules/instruction'
+    }
+
+    output.classesDir '$buildDir/modules/instruction/'
+  }    
+  services {
+    java {
+      srcDir '../src/main/java/modules/services'
+    }
+
+    output.classesDir '$buildDir/modules/services/'
   }
-  assemble 
-}
+  processing {
+    java {
+      srcDir '../src/main/java/modules/processing'
+    }
 
-task testing <<{
-  doFirst {
-    buildDir = '../dist/testing'
+    output.classesDir '$buildDir/modules/processing/'
   }
-  build
+  storagge {
+    java {
+      srcDir '../src/main/java/modules/storage'
+    }
+    output.classesDir '$buildDir/modules/storage/'
+  }
+  output {
+    java {
+      srcDir '../src/main/java/modules/output'
+    }
+    output.classesDir '$buildDir/modules/output/'
+  }
+  networking {
+    java {
+      srcDir '../src/main/java/modules/networking'
+    }
+    output.classesDir '$buildDir/modules/networking/'
+  }
+  movement {
+    java {
+      srcDir '../src/main/java/modules/modules'
+    }
+    output.classesDir '$buildDir/modules/movement/'
+  }
+  monitoring {
+    java {
+      srcDir '../src/main/modules/monitoring'
+    }
+    output.classesDir '$buildDir/modules/monitoring/'
+  }
 }
-
 
 task mainJavadoc(type: Javadoc) {
-    source sourceSets.main.allJava
+  source sourceSets.main.allJava
 }
 
 task mainTest(type: Test) {
-    testClassesDir = sourceSets.main.output.classesDir
+  testClassesDir = sourceSets.main.output.classesDir
     classpath = sourceSets.main.runtimeClasspath
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
-dependencies {
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
-    testCompile group: 'junit', name: 'junit', version: '4.+'
-}
 
-test {
-    systemProperties 'property': 'value'
-}
 
 uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'repos'
-       }
+  repositories {
+    flatDir {
+      dirs 'repos'
     }
+  }
 }
