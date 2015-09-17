@@ -13,7 +13,6 @@ public class ExampleTaskFilter extends SimpleFilter<Task, Task> {
     protected Task transformOne(Task in) {
     	Task out = in;
         System.out.println("filtered " + " to " + out.toString());
-        delayForDebug(100);
         return out;
     }
 }

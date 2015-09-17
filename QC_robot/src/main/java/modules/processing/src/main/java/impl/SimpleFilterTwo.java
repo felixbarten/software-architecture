@@ -7,7 +7,7 @@ import src.main.java.Filter;
 import src.main.java.FilterTwo;
 import src.main.java.Pipe;
 
-public abstract class SimpleFilterTwo<I,I2, O> extends FilterTwo<I,I2, O> {
+public abstract class SimpleFilterTwo<I,I2, O> extends FilterTwo<I, I2, O> {
 	 public SimpleFilterTwo(Pipe<I> input,Pipe<I2> input2,Pipe<O> output) {
 	        super(input,input2, output);
 	    }

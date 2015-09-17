@@ -1,7 +1,5 @@
 package src.main.java.impl;
 
-import com.sun.jmx.snmp.tasks.Task;
-
 import src.main.java.Pipe;
 import src.main.java.impl.SimpleFilter;
 
@@ -14,7 +12,6 @@ public class ExampleFilter extends SimpleFilter<Integer, String> {
     protected String transformOne(Integer in) {
         String out = Integer.toString(in);
         System.out.println("filtered " + Integer.toString(in) + " to " + out);
-        delayForDebug(100);
         return out;
     }
     

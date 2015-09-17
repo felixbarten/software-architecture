@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import src.main.java.Filter;
 import src.main.java.FilterTwo;
-import src.main.java.Generator;
 import src.main.java.Pipe;
 import src.main.java.Sink;
 import src.main.java.Task;
