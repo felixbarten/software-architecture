@@ -15,17 +15,18 @@ public abstract class SimpleFilterTwo<I,I2, O> extends FilterTwo<I,I2, O> {
 	    @Override
 	    protected void transformBetween(Pipe<I> input,Pipe<I2> input2, Pipe<O> output) {
 	        try {
-	        	List<I, I2> taskList = new ArrayList<Task>();
 	            I in;
 	            I2 in2;
+	            
 	            while ((in = input.nextOrNullIfEmptied()) != null) {
-	                O out = transformOne(in);
-	                output.put(out);
+	            
+		            while ((in2 = input2.nextOrNullIfEmptied()) != null) {
+		                O out = transformOne(in, in2);
+		                output.put(out);
+		            }
 	            }
-	            while ((in2 = input2.nextOrNullIfEmptied()) != null) {
-	                //O out = transformOne(in2);
-	                //output.put(out);
-	            }
+
+	            
 	        } catch (InterruptedException e) {
 	            // TODO handle properly, using advice in http://www.ibm.com/developerworks/java/library/j-jtp05236/
 	            System.err.println("interrupted");
@@ -35,5 +36,5 @@ public abstract class SimpleFilterTwo<I,I2, O> extends FilterTwo<I,I2, O> {
 	        output.closeForWriting();
 	    }
 
-	    protected abstract O transformOne(I in);
+	    protected abstract O transformOne(I in, I2 in2);
 }
