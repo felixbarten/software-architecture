@@ -1,6 +1,7 @@
 package src.main.java.impl;
 
 import src.main.java.Pipe;
+import src.main.java.Task;
 import src.main.java.Filter;
 
 public abstract class SimpleFilter<I, O> extends Filter<I, O> {
@@ -8,7 +9,7 @@ public abstract class SimpleFilter<I, O> extends Filter<I, O> {
         super(input, output);
     }
 
-    @Override
+	@Override
     protected void transformBetween(Pipe<I> input, Pipe<O> output) {
         try {
             I in;

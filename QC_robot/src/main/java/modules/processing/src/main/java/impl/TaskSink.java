@@ -16,7 +16,6 @@ import src.main.java.Task;
 	            while ((in = pipe.nextOrNullIfEmptied()) != null) {
 	                System.out.println(in);
 	                in.toString();
-	                delayForDebug(300);
 	            }
 	            System.out.println("sink finished");
 	        } catch (InterruptedException e) {

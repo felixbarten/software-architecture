@@ -12,43 +12,54 @@ import src.main.java.Task;
 public class ExampleScheduler {
 
 	public static void main(String[] args) {
-		  // create pipes
-        final Pipe<Integer> genToFilter = new PipeImpl<Integer>();
-        final Pipe<String> filterToOut = new PipeImpl<String>();
+		// create pipes
+        Pipe<Task> input = new PipeImpl<Task>();
+        Pipe<Task> input2 = new PipeImpl<Task>();
+        Pipe<Task> output = new PipeImpl<Task>();
         
-        ArrayList<Task> taskList = new ArrayList<>();
         Task coffee = new Task("Make Coffee", 1);
         Task medicine = new Task("Administer medicine", 9);
 
-        
-        final Pipe<Task> input = new PipeImpl<Task>();
-        final Pipe<Task> input2 = new PipeImpl<Task>();
-        final Pipe<Task> output = new PipeImpl<Task>();
 
+        // pipeline 1       
+        final FilterPriority filt = new FilterPriority(input, input2, output);        
+        final Sink<Task> taskSink = new TaskSink(output);
+        System.out.println("Start pipeline 1");
         input.put(coffee);
         input2.put(medicine);
         
-        taskList.add(coffee);
-        taskList.add(medicine);
-
-        // create components that use the pipes
-        //final Generator<Integer> generator = new ExampleGenerator(genToFilter);
-        final Filter<Integer, String> filter = new ExampleFilter(genToFilter, filterToOut);
-        
-        
-        final FilterPriority filt = new FilterPriority(input, input2, output);
-        
-        final Sink<String> sink = new ExampleSink(filterToOut);
-        
-        final Sink<Task> taskSink = new TaskSink(output);
-
-        // start all components
-        //generator.start();     
-        //filter.start();
-        //sink.start();
-
         filt.start();
         taskSink.start();
+        filt.stop();
+        taskSink.stop();
+        
+        input.closeForWriting();
+        input2.closeForWriting();
+        System.out.println("end pipeline 1");
+
+        // pipeline 2
+        System.out.println("Start pipeline 2");
+        input = new PipeImpl<Task>();
+        input2 =  new PipeImpl<Task>();
+        output  = new PipeImpl<Task>();
+        
+        input.put(coffee);
+        input2.put(medicine);
+        
+        FilterPriority prio_filter = new FilterPriority(input, input2, output);        
+        Pipe<Task> input3 = output;        
+        final Filter<Task, Task> filt2 = new ExampleTaskFilter(input3, output);
+        TaskSink task_sink = new TaskSink(output);
+
+        prio_filter.start();
+        filt2.start();
+        task_sink.start();
+        prio_filter.stop();
+        filt2.stop();
+        task_sink.stop();
+        
+        System.out.println("end pipeline 2");
+
         
         System.out.println("runner finished");
 	}
