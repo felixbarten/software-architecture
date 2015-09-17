@@ -67,3 +67,7 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+# ignore test reports from gradle
+reports/
+test-results/

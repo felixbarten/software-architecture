@@ -9,23 +9,12 @@ import src.main.java.Task;
 
 	public class TaskSink extends Sink<Task> {
 	    List<Task> tasks;
-	    List<EventHandler> observers;
 		
 		public TaskSink(Pipe<Task> input) {
 	        super(input);
 	        tasks = new ArrayList<Task>();
-	        observers = new ArrayList<EventHandler>();
 	    }
 		 
-		public void addObserver(EventHandler obs) {
-			this.observers.add(obs);
-		}
-		public void notifyObservers() {
-			for (EventHandler obs: observers) {
-				obs.fireEvent();
-			}
-		}
-		
 	    public List<Task> getTasks() {
 			return tasks;
 		}
@@ -46,7 +35,7 @@ import src.main.java.Task;
 	            e.printStackTrace();
 	        } finally {
 	            System.out.close();
-	            notifyObservers();
+	            
 	        }
 	    }
 	}
