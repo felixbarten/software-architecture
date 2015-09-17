@@ -1,12 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-def dest = '../dist/debugging'
+def dest = 'QC_robot/dist/debugging'
 
-buildDir = 'dest'
+buildDir = dest
 
 subprojects {
-  buildDir = new File(rootDir, '../dist/debugging/modules/')
+  buildDir = new File(rootDir, 'QC_robot/dist/debugging/modules/')
     apply plugin: 'java'
 
     dependencies {
@@ -19,7 +19,6 @@ subprojects {
 
 def version = '1.0'
 
-
 jar {
   manifest {
     attributes 'Implementation-Title': 'Quality Care Robot',
@@ -30,67 +29,67 @@ jar {
 sourceSets {
   main {
     java {
-      srcDir '../src/main/java'
+      srcDir 'QC_robot/src/main/java'
     }
     resources {
-      srcDir '../src/main/resources'
+      srcDir 'QC_robot/src/main/resources'
     }
   }
   tests {
     java {
-      srcDir '../src/main/java/modules/instruction'
+      srcDir 'QC_robot/src/main/java/modules/instruction'
     }
 
     output.classesDir '$buildDir/modules/instruction/'
   }    
   instruction {
     java {
-      srcDir '../src/main/java/modules/instruction'
+      srcDir 'QC_robot/src/main/java/modules/instruction'
     }
 
     output.classesDir '$buildDir/modules/instruction/'
   }    
   services {
     java {
-      srcDir '../src/main/java/modules/services'
+      srcDir 'QC_robot/src/main/java/modules/services'
     }
 
     output.classesDir '$buildDir/modules/services/'
   }
   processing {
     java {
-      srcDir '../src/main/java/modules/processing'
+      srcDir 'QC_robot/src/main/java/modules/processing'
     }
 
     output.classesDir '$buildDir/modules/processing/'
   }
   storagge {
     java {
-      srcDir '../src/main/java/modules/storage'
+      srcDir 'QC_robot/src/main/java/modules/storage'
     }
     output.classesDir '$buildDir/modules/storage/'
   }
   output {
     java {
-      srcDir '../src/main/java/modules/output'
+      srcDir 'QC_robot/src/main/java/modules/output'
     }
     output.classesDir '$buildDir/modules/output/'
   }
   networking {
     java {
-      srcDir '../src/main/java/modules/networking'
+      srcDir 'QC_robot/src/main/java/modules/networking'
     }
     output.classesDir '$buildDir/modules/networking/'
   }
   movement {
     java {
-      srcDir '../src/main/java/modules/modules'
+      srcDir 'QC_robot/src/main/java/modules/modules'
     }
     output.classesDir '$buildDir/modules/movement/'
   }
   monitoring {
     java {
-      srcDir '../src/main/modules/monitoring'
+      srcDir 'QC_robot/src/main/modules/monitoring'
     }
     output.classesDir '$buildDir/modules/monitoring/'
   }
