@@ -22,20 +22,21 @@ Before starting installation install all the necessary tools from the requiremen
 
 1. Clone the project with `git clone git@github.com:felixbarten/software-architecture.git` (for SSH) 
 2. Run the gradle script (linux assumed) 
-```
-> cd ./QC_robot/buildscripts
-> chmod u+x ./gradlew
-> ./gradlew eclipse
-> ./gradlew build
-```
-These commands will create the necessary eclipse project files and build the project. 
-
-3. Import the project into eclipse via the Import wizard. 
-4. Choose "import project from Git" 
-5. Browse to the repository from where to import
-6. Import the QC_robot/buildscripts folder.
-7. A project should appear in the import window.
-8. Click finish to complete the project import. 
+3. (Optional) It might be required to make the gradlew wrapper executable. Execute this command to make the wrapper executable.
+    ```
+    > chmod u+x ./gradlew
+    ```
+4. Run the following commands to generate eclipse project files and build the project
+    ```
+    > ./gradlew eclipse
+    > ./gradlew build
+    ```
+5. Import the project into eclipse via the Import wizard. 
+6. Choose "import project from Git" 
+7. Browse to the repository from where to import
+8. Import the QC_robot/buildscripts folder.
+9. A project should appear in the import window.
+10. Click finish to complete the project import. 
 
 ### Building the project
 
