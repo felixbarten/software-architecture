@@ -29,10 +29,10 @@ jar {
 sourceSets {
   main {
     java {
-      srcDir 'QC_robot/src/main/java'
+      srcDir 'QC_robot/src/main/javas'
     }
     resources {
-      srcDir 'QC_robot/src/main/resources'
+      srcDir 'QC_robot/src/main/resourcess'
     }
   }
   tests {
