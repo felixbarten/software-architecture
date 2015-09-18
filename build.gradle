@@ -1,16 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-def dest = 'QC_robot/dist/debugging'
-
-buildDir = dest
+// Determine our build destination
+// Use "gradle -Penv=release build" to change build type
+task config  {
+  def tmp = rootProject.hasProperty("env") ? "$env" : 'debugging'
+    ext.environment = tmp
+    buildDir = "QC_robot/dist/$environment"
+}
 
 subprojects {
-  buildDir = new File(rootDir, 'QC_robot/dist/debugging/modules/')
+  buildDir = new File("${rootProject.buildDir}/modules/")
     apply plugin: 'java'
-
     dependencies {
-  		testCompile 'junit:junit:4.12'
+      testCompile 'junit:junit:4.12'
     }
   repositories {
     mavenCentral()
@@ -26,94 +29,15 @@ jar {
   }
 }
 
-sourceSets {
-  main {
-    java {
-      srcDir 'QC_robot/src/main/javas'
-    }
-    resources {
-      srcDir 'QC_robot/src/main/resourcess'
-    }
-  }
-  tests {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/instruction'
-    }
-
-    output.classesDir '$buildDir/modules/instruction/'
-  }    
-  instruction {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/instruction'
-    }
-
-    output.classesDir '$buildDir/modules/instruction/'
-  }    
-  services {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/services'
-    }
-
-    output.classesDir '$buildDir/modules/services/'
-  }
-  processing {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/processing'
-    }
-
-    output.classesDir '$buildDir/modules/processing/'
-  }
-  storagge {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/storage'
-    }
-    output.classesDir '$buildDir/modules/storage/'
-  }
-  output {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/output'
-    }
-    output.classesDir '$buildDir/modules/output/'
-  }
-  networking {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/networking'
-    }
-    output.classesDir '$buildDir/modules/networking/'
-  }
-  movement {
-    java {
-      srcDir 'QC_robot/src/main/java/modules/modules'
-    }
-    output.classesDir '$buildDir/modules/movement/'
-  }
-  monitoring {
-    java {
-      srcDir 'QC_robot/src/main/modules/monitoring'
-    }
-    output.classesDir '$buildDir/modules/monitoring/'
-  }
+//Generate all documentation
+task genJavadoc(type: Javadoc) {
+      subprojects.each { 
+          source it.sourceSets.main.allJava 
+            destinationDir = reporting.file("$rootDir/QC_robot/docs/modules/${it.name}")
+      } 
 }
 
-task mainJavadoc(type: Javadoc) {
-  source sourceSets.main.allJava
-}
-
-task mainTest(type: Test) {
-  testClassesDir = sourceSets.main.output.classesDir
-    classpath = sourceSets.main.runtimeClasspath
-}
 
 repositories {
   mavenCentral()
-}
-
-
-
-uploadArchives {
-  repositories {
-    flatDir {
-      dirs 'repos'
-    }
-  }
 }
