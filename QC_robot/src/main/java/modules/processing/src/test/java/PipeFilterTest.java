@@ -182,7 +182,6 @@ public class PipeFilterTest {
         output.closeForWriting();
     }
 	
-	
 	/**
 	 * Test the output of a number of single input filters with a dual input filter
 	 * i
@@ -213,10 +212,11 @@ public class PipeFilterTest {
 
         
         final TaskStateFilter filter = new TaskStateFilter(input, output);
-        final PriorityFilter prioFilter = new PriorityFilter(output, input2, output);
-        
         Pipe<Task> out2 = output;
-		final Filter<Task, Task> filter2 = new TaskStateFilter(out2, output);
+        final PriorityFilter prioFilter = new PriorityFilter(out2, input2, output);
+        
+        Pipe<Task> out3 = output;
+		final Filter<Task, Task> filter2 = new TaskStateFilter(out3, output);
         
                 
         TaskSink task_sink = new TaskSink(output);
@@ -244,7 +244,9 @@ public class PipeFilterTest {
         input.closeForWriting();
         input2.closeForWriting();
         out2.closeForWriting();
+        out3.closeForWriting();
         output.closeForWriting();
 	}
+
 	
 }
