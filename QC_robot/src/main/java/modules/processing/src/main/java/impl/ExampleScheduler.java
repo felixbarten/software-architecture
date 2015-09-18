@@ -7,6 +7,8 @@ import src.main.java.FilterTwo;
 import src.main.java.Pipe;
 import src.main.java.Sink;
 import src.main.java.Task;
+import src.main.java.impl.filters.PriorityFilter;
+import src.main.java.impl.filters.TaskStateFilter;
 
 public class ExampleScheduler {
 
@@ -21,7 +23,7 @@ public class ExampleScheduler {
 
 
         // pipeline 1       
-        final FilterPriority filt = new FilterPriority(input, input2, output);        
+        final PriorityFilter filt = new PriorityFilter(input, input2, output);        
         final Sink<Task> taskSink = new TaskSink(output);
         System.out.println("Start pipeline 1");
         input.put(coffee);
@@ -45,9 +47,9 @@ public class ExampleScheduler {
         input.put(coffee);
         input2.put(medicine);
         
-        FilterPriority prio_filter = new FilterPriority(input, input2, output);        
+        PriorityFilter prio_filter = new PriorityFilter(input, input2, output);        
         Pipe<Task> input3 = output;        
-        final Filter<Task, Task> filt2 = new ExampleTaskFilter(input3, output);
+        final Filter<Task, Task> filt2 = new TaskStateFilter(input3, output);
         TaskSink task_sink = new TaskSink(output);
 
         prio_filter.start();
