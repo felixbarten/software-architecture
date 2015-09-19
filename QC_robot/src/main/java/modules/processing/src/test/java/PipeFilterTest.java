@@ -40,12 +40,11 @@ public class PipeFilterTest {
         
         filt.start();
         task_sink.start();
+        
+        
         filt.stop();
         task_sink.stop();
-        input.closeForWriting();
-        input2.closeForWriting();
-
-       
+      
         try {
         	// sleep because of delays in pipe
 			Thread.sleep(300);
@@ -53,12 +52,14 @@ public class PipeFilterTest {
 	        assertEquals(medicine, task_sink.getTasks().get(0));
         } catch (InterruptedException e) {
 			e.printStackTrace();
-		}        	
+		}    
+        
+        input.closeForWriting();
+        input2.closeForWriting();
+        output.closeForWriting();
 	}
 	
 
-	
-	
 	@Test
 	public void singleInputTest() {
         Pipe<Task> input = new PipeImpl<Task>();
@@ -86,7 +87,6 @@ public class PipeFilterTest {
 	        assertEquals(tasks.get(0), coffee);
 	        assertEquals(tasks.get(1), medicine);  
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         input.closeForWriting();
@@ -124,7 +124,6 @@ public class PipeFilterTest {
 	        assertEquals(State.FINISHED, tasks.get(2).getState());  
 
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         input.closeForWriting();
@@ -135,6 +134,7 @@ public class PipeFilterTest {
 	@Test
 	public void doubleFilterTest() {
         Pipe<Task> input = new PipeImpl<Task>();
+        Pipe<Task> intermediateOutput = new PipeImpl<Task>();
         Pipe<Task> output = new PipeImpl<Task>();
         
         Task coffee = new Task("Make Coffee", 1, State.STARTED);
@@ -146,9 +146,8 @@ public class PipeFilterTest {
         input.put(openDoor);
         
         
-        final Filter<Task, Task> filter = new TaskStateFilter(input, output);
-        Pipe<Task> out2 = output;
-        final PassthroughFilter filter2 = new PassthroughFilter(out2, output);
+        final Filter<Task, Task> filter = new TaskStateFilter(input, intermediateOutput);
+        final PassthroughFilter filter2 = new PassthroughFilter(intermediateOutput, output);
         
         TaskSink task_sink = new TaskSink(output);
 
@@ -165,36 +164,38 @@ public class PipeFilterTest {
 	        List<Task> tasks = task_sink.getTasks();
 	        System.out.print(tasks);
 
-	        /* Random test results, succeeds sometimes but fails mostly.
 			assertEquals(3, tasks.size());
 	        assertEquals(State.STOPPED, tasks.get(0).getState());
 	        assertEquals(State.FINISHED, tasks.get(1).getState());  
 	        assertEquals(State.FINISHED, tasks.get(2).getState());  
-	        */
+	        
 	        System.out.print(tasks);
 
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         input.closeForWriting();
-        out2.closeForWriting();
+        intermediateOutput.closeForWriting();
         output.closeForWriting();
     }
 	
 	/**
-	 * Test the output of a number of single input filters with a dual input filter
+	 * Test the output of a number of single input filters with a dual input filter.
+	 * The expected result is that for ever 2 elements only one will be returned so it will have a smaller output than the intput.
 	 * i
 	 * ======> Filter ====>						 out
 	 * i2					Filter2=====>Filter3====>
 	 * ===================>
 	 */
+
 	@Test
 	public void multipleFiltersTest() {
         Pipe<Task> input = new PipeImpl<Task>();
         Pipe<Task> input2 = new PipeImpl<Task>();
         Pipe<Task> output = new PipeImpl<Task>();
-        
+        Pipe<Task> intermediateOut = new PipeImpl<Task>();
+        Pipe<Task> intermediateOut2 = new PipeImpl<Task>();
+
         Task coffee = new Task("Make Coffee", 1, State.STARTED);
         Task medicine = new Task("Administer medicine", 9, State.IDLE);
         Task openDoor = new Task("Open the door", 5, State.FINISHED);
@@ -209,16 +210,12 @@ public class PipeFilterTest {
         // input pipe 2
         input2.put(makeBeverage);
         input2.put(helpResident);
-
+        input2.put(coffee);
         
-        final TaskStateFilter filter = new TaskStateFilter(input, output);
-        Pipe<Task> out2 = output;
-        final PriorityFilter prioFilter = new PriorityFilter(out2, input2, output);
-        
-        Pipe<Task> out3 = output;
-		final Filter<Task, Task> filter2 = new TaskStateFilter(out3, output);
-        
-                
+        final TaskStateFilter filter = new TaskStateFilter(input, intermediateOut);
+        final PriorityFilter prioFilter = new PriorityFilter(intermediateOut, input2, intermediateOut2);
+		final Filter<Task, Task> filter2 = new TaskStateFilter(intermediateOut2, output);
+      
         TaskSink task_sink = new TaskSink(output);
 
         filter.start();
@@ -234,19 +231,59 @@ public class PipeFilterTest {
         try {
 	        Thread.sleep(500);			
 	        List<Task> tasks = task_sink.getTasks();
-			assertEquals(4, tasks.size());
+			assertEquals(3, tasks.size());
 			System.out.print(tasks);
 
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+        input.closeForWriting();
+        input2.closeForWriting();
+        intermediateOut.closeForWriting();
+        intermediateOut2.closeForWriting();
+        output.closeForWriting();
+	}
+	
+	/**
+	 * test what happens when only one argument is supplied to the multiple input filter
+	 */
+	@Test
+	public void multipleFiltersTest2() {
+        Pipe<Task> input = new PipeImpl<Task>();
+        Pipe<Task> input2 = new PipeImpl<Task>();
+        Pipe<Task> output = new PipeImpl<Task>();
+
+        Task coffee = new Task("Make Coffee", 1, State.STARTED);
+        Task medicine = new Task("Administer medicine", 9, State.IDLE);
+
+        // input pipe 1        
+        input.put(coffee);
+        input.put(medicine);
+
+        // input pipe 2
+        input2.put(coffee);
+
+        final PriorityFilter prioFilter = new PriorityFilter(input, input2, output);                   
+        TaskSink task_sink = new TaskSink(output);
+
+        prioFilter.start();
+        task_sink.start();       		
+
+        prioFilter.stop();
+        task_sink.stop();
+        
+        try {
+	        Thread.sleep(500);			
+	        List<Task> tasks = task_sink.getTasks();
+			assertEquals(1, tasks.size());
+			System.out.print(tasks);
+
+        } catch (InterruptedException e) {
 			e.printStackTrace();
 		}
         input.closeForWriting();
         input2.closeForWriting();
-        out2.closeForWriting();
-        out3.closeForWriting();
         output.closeForWriting();
-	}
-
-	
+	}	
 }
