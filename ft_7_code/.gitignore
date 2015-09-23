@@ -1,0 +1,30 @@
+*.class
+ 
+######################
+# Eclipse
+######################
+ 
+*.pydevproject
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+ 
+# Directories #
+/build/
+/bin/
+target/
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+ 
+# Package Files #
+*.jar
+*.war
+*.ear
