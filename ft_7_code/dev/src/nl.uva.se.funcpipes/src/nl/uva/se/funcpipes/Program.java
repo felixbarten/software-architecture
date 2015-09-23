@@ -1,5 +1,6 @@
 package nl.uva.se.funcpipes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -12,9 +13,60 @@ public class Program {
 
 	public static void main(String[] args) {
 		//examples();
-		feedbackLoopExample();
+		//BPSample();
+		
+		exampleBloodPressure();
+		
+		//feedbackLoopExample();
 	}
 
+	public static void BPSample() {
+		List<BloodPressure>  bps = new ArrayList<BloodPressure> ();
+	
+		for (int i=0; i<100; i++) {
+			// if not showing output skip creating object step.
+			BloodPressure bpObj = BPGenerator.generateBP();
+			bps.add(bpObj);
+			bpObj.readDiagnosis();
+		}
+	}
+	
+	public static List<BloodPressure> BPSamples() {
+		List<BloodPressure>  bps = new ArrayList<BloodPressure> ();
+	
+		for (int i=0; i<100; i++) {
+			bps.add(BPGenerator.generateBP());
+		}
+		return bps;
+	}
+	
+	public static void exampleBloodPressure() {
+		System.out.println("Pipeline started");
+		Function <List<BloodPressure>, Double> avg = (f) -> f.stream().mapToInt(BloodPressure::getBloodPressure).average().getAsDouble();
+		
+		Consumer <List<BloodPressure>> average = (f) -> f.stream().mapToInt(BloodPressure::getBloodPressure).average().getAsDouble();
+		
+		
+		Pipeline <List<BloodPressure>> p = new Pipeline<List<BloodPressure>>();
+		
+		List<BloodPressure> bps = new ArrayList<BloodPressure>();
+		bps.add(BPGenerator.generateBP());
+		bps.add(BPGenerator.generateBP());		
+		bps.add(BPGenerator.generateBP());
+		
+		p.clear();
+		p.transform(avg)
+		.via(i -> System.out.println(i));		
+		
+		p.feed(bps);
+		p.feed(Arrays.asList(BPGenerator.generateBP(), BPGenerator.generateBP()));
+		p.feed(BPSamples());
+				
+		System.out.println("Pipeline finished");
+		
+		
+	}
+	
 	public static void examples() {
 		
 		// This 'functional' pipeline was inspired by LINQ, and is somewhat
