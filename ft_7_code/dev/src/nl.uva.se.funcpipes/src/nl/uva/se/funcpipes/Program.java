@@ -13,15 +13,65 @@ public class Program {
 
 	public static void main(String[] args) {
 		//examples();
+
+		//BPSample();
+		exampleBloodPressure();
 		//feedbackLoopExample();
 		showEngineersLoggingInfo();
 
 	}
 	
-	public static void showEngineersLoggingInfo(){
+	public static void BPSample() {
+		List<BloodPressure>  bps = new ArrayList<BloodPressure> ();
+	
+		for (int i=0; i<100; i++) {
+			// if not showing output skip creating object step.
+			BloodPressure bpObj = BPGenerator.generateBP();
+			bps.add(bpObj);
+			bpObj.readDiagnosis();
+		}
+	}
+	
+	public static List<BloodPressure> BPSamples() {
+		List<BloodPressure>  bps = new ArrayList<BloodPressure> ();
+	
+		for (int i=0; i<100; i++) {
+			bps.add(BPGenerator.generateBP());
+		}
+		return bps;
+	}
+	
+	public static void exampleBloodPressure() {
+		System.out.println("Pipeline started");
+		Function <List<BloodPressure>, Double> avg = (f) -> f.stream().mapToInt(BloodPressure::getBloodPressure).average().getAsDouble();
 		
-		Pipeline<LoggingInfo> p = new Pipeline<LoggingInfo>();
+		Consumer <List<BloodPressure>> average = (f) -> f.stream().mapToInt(BloodPressure::getBloodPressure).average().getAsDouble();
+		
+		
+		Pipeline <List<BloodPressure>> p = new Pipeline<List<BloodPressure>>();
+		
+		List<BloodPressure> bps = new ArrayList<BloodPressure>();
+		bps.add(BPGenerator.generateBP());
+		bps.add(BPGenerator.generateBP());		
+		bps.add(BPGenerator.generateBP());
+		
+		p.clear();
+		p.transform(avg)
+		.via(i -> System.out.println(i));		
+		
+		p.feed(bps);
+		p.feed(Arrays.asList(BPGenerator.generateBP(), BPGenerator.generateBP()));
+		p.feed(BPSamples());
+				
+		System.out.println("Pipeline finished");
+		
+		
+	}
+	
 
+	public static void showEngineersLoggingInfo(){
+	
+		Pipeline<LoggingInfo> p = new Pipeline<LoggingInfo>();
 		LoggingInfo li = new LoggingInfo("soft_eng", "test1", "aaa123", 5, 5);
 		LoggingInfo li_2 = new LoggingInfo("soft_eng", "test2", "aaa123", 5, 4);
 		LoggingInfo li_3 = new LoggingInfo("soft_tester", "test3", "aaa123", 5, 5);
