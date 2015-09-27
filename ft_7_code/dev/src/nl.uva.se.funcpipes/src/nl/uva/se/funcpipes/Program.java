@@ -1,5 +1,6 @@
 package nl.uva.se.funcpipes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -12,9 +13,31 @@ public class Program {
 
 	public static void main(String[] args) {
 		//examples();
-		feedbackLoopExample();
-	}
+		//feedbackLoopExample();
+		showEngineersLoggingInfo();
 
+	}
+	
+	public static void showEngineersLoggingInfo(){
+		
+		Pipeline<LoggingInfo> p = new Pipeline<LoggingInfo>();
+
+		LoggingInfo li = new LoggingInfo("soft_eng", "test1", "aaa123", 5, 5);
+		LoggingInfo li_2 = new LoggingInfo("soft_eng", "test2", "aaa123", 5, 4);
+		LoggingInfo li_3 = new LoggingInfo("soft_tester", "test3", "aaa123", 5, 5);
+		LoggingInfo li_4 = new LoggingInfo("soft_tester", "test4", "aaa123", 6, 15);
+		LoggingInfo li_5 = new LoggingInfo("soft_eng", "test5", "aaa123", 5, 5);
+		LoggingInfo li_6 = new LoggingInfo("soft_dev", "test6", "aaa123", 5, 5);
+
+		printTitle("Example: Logging Info for Software Engineers");
+		p.clear();
+		
+		p.filter(i -> i.job.equals("soft_eng"));
+		p.via(i -> System.out.print(i + " "));
+
+		p.feed(Arrays.asList(li,li_2,li_3,li_4,li_5, li_6));
+	}
+		
 	public static void examples() {
 		
 		// This 'functional' pipeline was inspired by LINQ, and is somewhat
@@ -80,8 +103,8 @@ public class Program {
 		// can also be configured with through a builder interface, which doesn't have these
 		// restrictions.
 		p.clear();
-		p.transform(i -> new Double(i))
-		 .via(d -> System.out.println(d));
+		p.transform(i -> new Double(i));
+		 p.via(d -> System.out.println(d));
 		
 		// And now we get the expected result.
 		p.feed(123);
