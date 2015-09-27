@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+
 /**
  * Builder interface for pipeline construction starting from the generic
  * argument.
